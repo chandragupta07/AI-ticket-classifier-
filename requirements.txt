@@ -1,0 +1,15 @@
+# Data Manipulation
+pandas
+numpy
+
+# Machine Learning & Serialization
+scikit-learn
+joblib
+
+# API Framework
+fastapi
+uvicorn[standard]
+
+# Experimentation & Testing
+jupyter
+pytest
