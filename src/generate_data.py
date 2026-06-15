@@ -78,21 +78,60 @@ def download_open_dataset():
                 suffix = random.choice(["", " Please help.", " Thanks.", " Fix it ASAP.", " Appreciate it."])
                 
                 # Add some noise/typos
-                text = prefix + base + suffix
+                text_raw = prefix + base + suffix
                 if random.random() > 0.8:
-                    text = text.lower()
+                    text_raw = text_raw.lower()
                 
-                data.append({"text": text.strip(), "category": category})
+                text = text_raw.strip()
+                
+                # Define Priority mapping rules
+                priority = "medium"
+                if category == "general_inquiry":
+                    priority = "low"
+                elif category == "password_reset":
+                    if "locked" in text.lower() or "2fa" in text.lower():
+                        priority = "urgent"
+                    else:
+                        priority = "high"
+                elif category == "billing":
+                    if "charged twice" in text.lower() or "refund" in text.lower():
+                        priority = "high"
+                    else:
+                        priority = "medium"
+                elif category == "technical_issue":
+                    if "crash" in text.lower() or "500" in text.lower() or "connect" in text.lower():
+                        priority = "urgent"
+                    else:
+                        priority = "medium"
+
+                # Define Sentiment mapping rules
+                sentiment = "neutral"
+                text_lower = text.lower()
+                if any(w in text_lower for w in ["frustrated", "crash", "locked", "error", "asap", "outage", "declined"]):
+                    sentiment = "negative"
+                elif any(w in text_lower for w in ["thanks", "appreciate"]):
+                    sentiment = "positive"
+                
+                data.append({
+                    "text": text,
+                    "category": category,
+                    "priority": priority,
+                    "sentiment": sentiment
+                })
         
         df = pd.DataFrame(data)
         # Shuffle
         df = df.sample(frac=1, random_state=42).reset_index(drop=True)
         # Save to CSV
         df.to_csv(csv_path, index=False)
-        print(f"✅ Generated and saved 1,000 realistic support tickets to {csv_path}")
+        print(f"[SUCCESS] Generated and saved 1,000 realistic support tickets with categories, priorities, and sentiments to {csv_path}")
         print(df.head())
         print("\nDataset Category Distribution:")
         print(df['category'].value_counts())
+        print("\nDataset Priority Distribution:")
+        print(df['priority'].value_counts())
+        print("\nDataset Sentiment Distribution:")
+        print(df['sentiment'].value_counts())
         
     except Exception as e:
         print(f"Error generating dataset: {e}")

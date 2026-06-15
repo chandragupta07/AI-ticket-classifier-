@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SupportMind AI — Customer Support Intelligence System</title>
+    <!-- Modern typography via Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <div class="brand-logo">
+                <div class="speechmark-logo-orb">
+                    <!-- Ticket icon -->
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zM6 10h12v2H6zm0 4h8v2H6z"/>
+                    </svg>
+                </div>
+                <span class="brand-name">SupportMind AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="/health" class="nav-link" target="_blank">System Status</a>
+                <a href="/docs" class="nav-link" target="_blank">API Specs</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO BAND (DARK) -->
+    <header class="hero-band-dark">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="eyebrow-uppercase">Support Operations Portal</div>
+            <h1 class="display-hero">TICKET DISPATCH</h1>
+            <p class="display-lg">Automated routing and queue distribution system.</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT (LIGHT) -->
+    <main class="content-band-light">
+        <div class="grid-container">
+            
+            <!-- COLUMN 1: INTERACTIVE WORKBENCH -->
+            <section class="workbench-panel">
+                <h2 class="display-sm">TICKET DETAILS</h2>
+                <p class="body-md">Insert ticket transcript details to analyze category classes, confidence scores, and recommend queue distribution.</p>
+                
+                <!-- PRESET CHIPS -->
+                <div class="shortcut-container">
+                    <span class="caption-strong">TICKET TEMPLATES:</span>
+                    <div class="chip-group">
+                        <button type="button" class="badge-chip" data-text="I cannot access my online account. It says 'account locked'. Please send a password reset link as soon as possible.">Password Reset</button>
+                        <button type="button" class="badge-chip" data-text="I was charged twice on my credit card for this month's premium package. I need a refund for the duplicate charge.">Duplicate Charge</button>
+                        <button type="button" class="badge-chip" data-text="The internet connection drops every 10 minutes, and the router starts blinking red. Please assist.">Network Outage</button>
+                        <button type="button" class="badge-chip" data-text="Where can I download the user manual for model V3 router? Is it available on the support portal?">User Manual</button>
+                    </div>
+                </div>
+
+                <!-- TICKET TEXTAREA -->
+                <div class="input-group">
+                    <label for="ticket-text" class="caption-uppercase">Ticket Body</label>
+                    <textarea id="ticket-text" class="text-input" placeholder="Paste incoming ticket text here..."></textarea>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <button type="button" id="classify-btn" class="button-primary">PROCESS & ROUTE</button>
+            </section>
+
+            <!-- COLUMN 2: LIVE OUTPUTS -->
+            <section class="results-panel">
+                <h2 class="display-sm">DISPATCH METRICS</h2>
+                
+                <div id="result-card" class="card-content empty-state">
+                    <div id="results-placeholder" class="placeholder-content">
+                        <p class="body-md">No ticket details loaded. Input details and select "Process & Route" to begin analysis.</p>
+                    </div>
+                    
+                    <div id="results-data" class="prediction-content hidden">
+                        <div class="result-row">
+                            <span class="caption-uppercase">Target Support Queue</span>
+                            <div id="predicted-category" class="category-badge">billing</div>
+                        </div>
+                        
+                        <div class="result-row">
+                            <span class="caption-uppercase">Routing Confidence</span>
+                            <div class="confidence-container">
+                                <div class="gauge-bar-track">
+                                    <div id="confidence-bar" class="gauge-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <span id="confidence-percentage" class="body-sm-strong">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="result-row" style="margin-top: var(--spacing-lg);">
+                            <span class="caption-uppercase">Predicted Priority</span>
+                            <div id="predicted-priority" class="priority-badge">medium</div>
+                        </div>
+
+                        <div class="result-row">
+                            <span class="caption-uppercase">Priority Confidence</span>
+                            <div class="confidence-container">
+                                <div class="gauge-bar-track">
+                                    <div id="priority-confidence-bar" class="gauge-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <span id="priority-confidence-percentage" class="body-sm-strong">0%</span>
+                            </div>
+                        </div>
+                        <div class="result-row" style="margin-top: var(--spacing-lg);">
+                            <span class="caption-uppercase">Customer Sentiment</span>
+                            <div id="predicted-sentiment" class="sentiment-badge">neutral</div>
+                        </div>
+
+                        <div class="result-row">
+                            <span class="caption-uppercase">Sentiment Confidence</span>
+                            <div class="confidence-container">
+                                <div class="gauge-bar-track">
+                                    <div id="sentiment-confidence-bar" class="gauge-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <span id="sentiment-confidence-percentage" class="body-sm-strong">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="result-row" style="margin-top: var(--spacing-lg);">
+                            <span class="caption-uppercase">AI Reasoning (Top Keywords)</span>
+                            <div id="reasoning-terms" class="chip-group" style="margin-top: var(--spacing-xs);">
+                                <!-- Reasoning chips inserted here -->
+                            </div>
+                        </div>
+
+                        <div class="result-row" style="margin-top: var(--spacing-lg);">
+                            <span class="caption-uppercase">Suggested Action</span>
+                            <div id="suggested-action" class="body-sm-strong" style="color: var(--primary); padding: var(--spacing-sm) var(--spacing-md); background-color: var(--canvas-soft); border-left: 4px solid var(--primary); border-radius: 4px; margin-top: var(--spacing-xs);">
+                                <!-- Suggested action text dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOG / HISTORY -->
+                <div class="history-section">
+                    <h3 class="caption-uppercase">Processed Queue Log</h3>
+                    <div class="history-table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket Excerpt</th>
+                                    <th>Routed Queue (Priority) [Sentiment]</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-rows">
+                                <tr class="empty-history-row">
+                                    <td colspan="3" class="caption">No records processed in this session.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="speechmark-logo-orb small-orb">
+                    <!-- Ticket icon -->
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zM6 10h12v2H6zm0 4h8v2H6z"/>
+                    </svg>
+                </div>
+                <div class="caption-uppercase">Internal Systems Integration</div>
+            </div>
+            <p class="caption">© 2026 SupportMind AI. Confidential & Proprietary Internal Tool.</p>
+        </div>
+    </footer>
+
+    <script src="/static/index.js"></script>
+</body>
+</html>

@@ -10,6 +10,9 @@ joblib
 fastapi
 uvicorn[standard]
 
+# NLP & Text Preprocessing
+nltk
+
 # Experimentation & Testing
 jupyter
 pytest
